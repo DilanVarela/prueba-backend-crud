@@ -18,6 +18,8 @@
 
 * After install XAMPP (if is necesary) go to `xampp\htdocs` and copy\clone repo here.
 
+* Open php.ini file and decomment (delete ; ) or add `extension=php_intl.dll`
+
 * Execute `composer install` and install project dependencies
 
 * `Start option MySQL AND APACHE` in `XAMPP Control Panel`
