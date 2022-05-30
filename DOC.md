@@ -12,20 +12,26 @@
 
 * [XAMPP]('https://www.apachefriends.org/download.html')
 
+* [Composer]('https://getcomposer.org/download/')
+
 # Process
 
 * After install XAMPP (if is necesary) go to `xampp\htdocs` and copy\clone repo here.
 
-* `Start option MySQL` in `XAMPP Control Panel`
+* Execute `composer install` and install project dependencies
 
-* Configure database in env archive (copy `env_example` and rename like `.env`) or `App\Config\Database`.
+* `Start option MySQL AND APACHE` in `XAMPP Control Panel`
+
+* Configure database in env archive (copy `env_example` and rename like `.env`) or `App\Config\Database`. You configure database name and tables in `http://localhost/phpmyadmin`
+
+* If you use .env remember delete each # in the line of database config or by default `App\Config\Database` is execute
 
 * In the root of the repo open a terminal and execute `php spark migrate`, with that command run all migrations.
 
 * For run seeders: 
-    * `php db:seed CountrySeeder`
-    * `php db:seed StateSeeder`
-    * `php db:seed CitySeeder`
+    * `php spark db:seed CountrySeeder`
+    * `php spark db:seed StateSeeder`
+    * `php spark db:seed CitySeeder`
 
 * Execute serve with `php spark serve`
 
