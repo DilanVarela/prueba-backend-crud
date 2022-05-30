@@ -18,7 +18,7 @@
 
 * After install XAMPP (if is necesary) go to `xampp\htdocs` and copy\clone repo here.
 
-* Open php.ini file and decomment (delete ; ) or add `extension=php_intl.dll`
+* Open php.ini file in `xampp\php` and decomment (delete ; ) or add `extension=php_intl.dll`
 
 * Execute `composer install` and install project dependencies
 
