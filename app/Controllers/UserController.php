@@ -32,54 +32,11 @@ class UserController extends BaseController
 
     public function addUser(){
 
-        $data = [];
+        $session = \Config\Services::session();
 
         $data_to_insert = $this->request->getPost();
 
-        // var_dump($data_to_insert);die();
-
-        $validation = $this->validate([
-            'gender' => 'required|not_select_value[gender]',
-            'age' => 'required|over_18[age]',
-            'name' => 'required|alpha_space',
-            'lastname' => 'required|alpha_space',
-            'email' => 'required|valid_email',
-            'address' => 'required|alpha_numeric_punct',
-            'country' => 'required|not_select_value[country]',
-            'state' => 'required|not_select_value[state]',
-            'city' => 'required|not_select_value[city]',
-
-        ]);
-
-        $data['validation_error'] = $this->validator;
-
-        if(!$validation){
-            return redirect()->back()->withInput();
-        }else{
-            $insertData = new User();
-            if($insertData->createUser($data_to_insert)){
-                return redirect('list_users');
-            }else{
-                return redirect()->back()->withInput();
-            }
-        }
-    }
-
-    public function updateUser($id){
-
-        $data = [];
-
-        // var_dump($id);die();
-
-        $data['validation_error'] = $this->validator;
-
-        $data_to_update = $this->request->getPost();
-
-        $data['form_add'] = false;
-
-        $data['form_update'] = 'Form_update';
-
-        unset($data_to_update['_method']);
+        unset($data_to_insert['csrf_test_name']);
 
         $validation = $this->validate([
             'gender' => 'required|not_select_value[gender]',
@@ -98,10 +55,49 @@ class UserController extends BaseController
         if(!$validation){
             return redirect()->back()->withInput();
         }else{
+            $insertData = new User();
+            if($insertData->createUser($data_to_insert)){
+                $session->setFlashdata('success', 'Se ha agregado exitosamente un usuario');
+                return redirect('list_users');
+            }else{
+                $session->setFlashdata('fail', 'Ha ocurrido un error, vuelva a intentarlo');
+                return redirect()->back()->withInput();
+            }
+        }
+    }
+
+    public function updateUser($id){
+
+        $session = \Config\Services::session();
+        
+        $data_to_update = $this->request->getPost();
+
+        unset($data_to_update['_method']);
+
+        unset($data_to_update['csrf_test_name']);
+
+        $validation = $this->validate([
+            'gender' => 'required|not_select_value[gender]',
+            'age' => 'required|over_18[age]',
+            'name' => 'required|alpha_numeric_space',
+            'lastname' => 'required|alpha_numeric_space',
+            'email' => 'required|valid_email',
+            'address' => 'required|alpha_numeric_punct',
+            'country' => 'required|not_select_value[country]',
+            'state' => 'required|not_select_value[state]',
+            'city' => 'required|not_select_value[city]',
+            'comment' => 'required',
+
+        ]);
+        if(!$validation){
+            return redirect()->back()->withInput();
+        }else{
             $inserData = new User();
+            $session->setFlashdata('success', 'Se ha editado exitosamente un usuario');
             if($inserData->updateUser($id, $data_to_update)){
                 return redirect('list_users');
             }else{
+                $session->setFlashdata('fail', 'Ha ocurrido un error, vuelva a intentarlo');
                 return redirect()->back()->withInput();
             }
         }
@@ -125,7 +121,6 @@ class UserController extends BaseController
 
         $city = $world->getCityByState($data['data_update'][0]['state']);
 
-
         $data['validation_error'] = $validation;
 
         $data['form_add'] = false;
@@ -143,13 +138,13 @@ class UserController extends BaseController
         $data['cities'] = $city;
 
         return view('Users', $data);
-
     }
 
     public function deleteUser($id){
-
+        $session = \Config\Services::session();
         $deleteData = new User();
         if($deleteData->deleteUser($id)){
+            $session->setFlashdata('success', 'Se ha elmiinado exitosamente un usuario');
             return redirect('list_users');
         }
     }

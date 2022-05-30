@@ -13,9 +13,11 @@ class User extends Model
     protected $table  = 'user';    
     protected $db;
     protected $builder;
+    protected $allowedFields = ['gender', 'age','name', 'lastname', 'email','address', 'type_resident', 'country', 'state', 'city', 'comment'];
 
     public function __construct()
     {
+        parent::__construct();
         $this->db = db_connect();
         $this->builder = $this->db->table($this->table);
     }
@@ -73,8 +75,8 @@ class User extends Model
 
         $world = new World();
 
-        $allUsers = $this->builder->get()->getResultArray();
-
+        $allUsers = $this->paginate(1);
+        
         foreach($allUsers as $key => $value){
             $allUsers[$key]['gender'] = ucfirst($allUsers[$key]['gender']);
             $allUsers[$key]['country'] = $world->getCountryByID($allUsers[$key]['country']);
@@ -94,11 +96,13 @@ class User extends Model
     public function mostRegistersCities(){
         $world = new World();
 
-        $citiesRegister = $this->db->query("SELECT COUNT(city) as 'Num cities', city FROM `user` GROUP BY city LIMIT 5")->getResultArray();
+        $citiesRegister = $this->db->query("SELECT COUNT(city) as 'Num cities', city FROM `user` GROUP BY city DESC LIMIT 5")->getResultArray();
 
         foreach($citiesRegister as $key => $value){
             $citiesRegister[$key]['city'] =  $world->getCityByID($citiesRegister[$key]['city']);
         }
+
+        arsort($citiesRegister);
 
         return $citiesRegister;
     }

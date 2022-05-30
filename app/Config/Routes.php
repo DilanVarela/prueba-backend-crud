@@ -33,8 +33,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'HomeController::index', ['as' => 'list_users']);
 
-$routes->get('/user', 'UserController::index', ['as' => 'users']);
-$routes->post('/user', 'UserController::addUser', ['as' => 'users_insert']);
+$routes->get('/user/add', 'UserController::index', ['as' => 'users']);
+$routes->post('/user/add', 'UserController::addUser', ['as' => 'users_insert']);
 
 $routes->get('/user/edit/(:num)', 'UserController::indexUpdate/$1', ['as' => 'user_to_update']);
 $routes->put('/user/edit/(:num)', 'UserController::updateUser/$1', ['as' => 'users_update']);
