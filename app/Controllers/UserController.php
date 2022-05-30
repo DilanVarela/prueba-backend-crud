@@ -48,7 +48,7 @@ class UserController extends BaseController
             'country' => 'required|not_select_value[country]',
             'state' => 'required|not_select_value[state]',
             'city' => 'required|not_select_value[city]',
-            'comment' => 'required',
+            'comment' => 'required|alpha_numeric_punct',
 
         ]);
 
@@ -86,7 +86,7 @@ class UserController extends BaseController
             'country' => 'required|not_select_value[country]',
             'state' => 'required|not_select_value[state]',
             'city' => 'required|not_select_value[city]',
-            'comment' => 'required',
+            'comment' => 'required|alpha_numeric_punct',
 
         ]);
         if(!$validation){
@@ -144,7 +144,7 @@ class UserController extends BaseController
         $session = \Config\Services::session();
         $deleteData = new User();
         if($deleteData->deleteUser($id)){
-            $session->setFlashdata('success', 'Se ha elmiinado exitosamente un usuario');
+            $session->setFlashdata('success', 'Se ha elmininado exitosamente un usuario');
             return redirect('list_users');
         }
     }
